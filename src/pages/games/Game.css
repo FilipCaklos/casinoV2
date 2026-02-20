@@ -1,0 +1,1104 @@
+.game-page {
+  animation: fadeIn var(--transition-normal) ease-out;
+}
+
+.game-page .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-lg);
+  transition: color var(--transition-fast);
+}
+
+.game-page .back-link:hover {
+  color: var(--primary);
+}
+
+.game-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.game-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.game-header h1 {
+  margin-bottom: var(--space-xs);
+}
+
+.game-header p {
+  color: var(--text-secondary);
+}
+
+/* Slot Machine */
+.slot-machine {
+  background: linear-gradient(180deg, #2a2a4a 0%, #1a1a2e 100%);
+  border: 3px solid var(--primary-dim);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.slot-machine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+
+.reels-container {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+.reel {
+  width: 100px;
+  height: 120px;
+  background: linear-gradient(180deg, #fff 0%, #e0e0e0 50%, #fff 100%);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s;
+}
+
+.reel .symbol {
+  font-size: 3rem;
+}
+
+.reel.spinning {
+  animation: spin 0.1s infinite;
+}
+
+.reel.winning {
+  background: linear-gradient(180deg, #ffffcc 0%, #ffff99 50%, #ffffcc 100%);
+  box-shadow: 0 0 20px var(--primary);
+}
+
+.win-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dim) 100%);
+  color: var(--bg-dark);
+  font-size: 1.5rem;
+  font-weight: 800;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.message-display {
+  position: absolute;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--danger);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+/* Game Controls */
+.game-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.bet-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  background: var(--bg-card);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-full);
+}
+
+.bet-controls .label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.bet-controls button {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.bet-controls button:hover:not(:disabled) {
+  background: var(--primary);
+  color: var(--bg-dark);
+}
+
+.bet-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bet-controls .bet-amount {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 60px;
+  text-align: center;
+}
+
+.spin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-2xl);
+  background: linear-gradient(135deg, var(--secondary) 0%, #9b0d45 100%);
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.spin-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(224, 17, 95, 0.5);
+}
+
+.spin-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spin-icon {
+  animation: spin 0.5s linear infinite;
+}
+
+/* Payout Table */
+.payout-table {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+.payout-table h3 {
+  font-size: 1rem;
+  margin-bottom: var(--space-md);
+  color: var(--primary);
+}
+
+.payouts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.payout-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-sm);
+  background: var(--bg-card-hover);
+  border-radius: var(--radius-sm);
+}
+
+.payout-amount {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .reel {
+    width: 70px;
+    height: 90px;
+  }
+
+  .reel .symbol {
+    font-size: 2rem;
+  }
+
+  .win-display {
+    font-size: 1rem;
+  }
+}
+
+/* Blackjack Table */
+.blackjack-table {
+  background: linear-gradient(180deg, #1a472a 0%, #0d2818 100%);
+  border: 4px solid #2d5a3d;
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  position: relative;
+}
+
+.blackjack-table .hand {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.blackjack-table .hand h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+}
+
+.blackjack-table .cards {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.blackjack-table .card {
+  width: 70px;
+  height: 100px;
+  background: white;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.blackjack-table .card.red {
+  color: #dc143c;
+}
+
+.blackjack-table .card .value {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.blackjack-table .card .suit {
+  font-size: 1.5rem;
+}
+
+.blackjack-table .card.placeholder {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+}
+
+.blackjack-table .game-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-md);
+  text-align: center;
+  z-index: 10;
+}
+
+.blackjack-table .game-message.win {
+  color: var(--success);
+}
+
+.blackjack-table .game-message.lose {
+  color: var(--danger);
+}
+
+.blackjack-table .game-message .win-amount {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: var(--space-sm);
+}
+
+.blackjack-table .spin-btn.stand {
+  background: linear-gradient(135deg, #2d5a3d 0%, #1a472a 100%);
+}
+
+/* Roulette */
+.roulette-wheel {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.roulette-numbers {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-xs);
+}
+
+.roulette-number {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.roulette-number.red {
+  background: #dc143c;
+  color: white;
+}
+
+.roulette-number.black {
+  background: #1a1a1a;
+  color: white;
+}
+
+.roulette-number.zero {
+  background: #50c878;
+  color: white;
+}
+
+.roulette-number.selected {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px var(--primary);
+}
+
+.roulette-number.winner {
+  animation: pulse 0.5s ease-in-out 3;
+}
+
+.roulette-wheel .zero {
+  background: #50c878;
+  color: white;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+  text-align: center;
+}
+
+.result-display {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.result-number {
+  font-size: 3rem;
+  font-weight: 800;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-md);
+}
+
+.result-number.red { background: #dc143c; color: white; }
+.result-number.black { background: #1a1a1a; color: white; }
+.result-number.green { background: #50c878; color: white; }
+
+.result-display .win-amount {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--success);
+  margin-top: var(--space-sm);
+}
+
+.roulette-bets .bet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+
+.roulette-bets .bet-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.roulette-bets .bet-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+}
+
+.roulette-bets .bet-btn.active {
+  background: rgba(255, 215, 0, 0.1);
+  border-color: var(--primary);
+}
+
+.roulette-bets .bet-name {
+  font-weight: 600;
+}
+
+.roulette-bets .bet-payout {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.roulette-bets .bet-amount {
+  font-size: 0.75rem;
+  color: var(--success);
+  font-weight: 700;
+}
+
+.clear-btn {
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.clear-btn:hover:not(:disabled) {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.total-bet {
+  text-align: center;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-md);
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* Baccarat */
+.baccarat-table {
+  background: linear-gradient(180deg, #1a472a 0%, #0d2818 100%);
+  border: 4px solid #2d5a3d;
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  position: relative;
+}
+
+.baccarat-table .hand {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.baccarat-table .hand h3 {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: var(--space-md);
+}
+
+.baccarat-table .cards {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.baccarat-table .card {
+  width: 70px;
+  height: 100px;
+  background: white;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.baccarat-table .card.red { color: #dc143c; }
+.baccarat-table .card .value { font-size: 1.25rem; font-weight: 700; }
+.baccarat-table .card .suit { font-size: 1.5rem; }
+.baccarat-table .card.placeholder {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+}
+
+.baccarat-table .game-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-md);
+  text-align: center;
+  z-index: 10;
+  color: var(--text-primary);
+}
+
+.baccarat-table .game-message.win { color: var(--success); }
+.baccarat-table .game-message.lose { color: var(--danger); }
+
+.bet-selection {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.bet-option {
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.bet-option:hover {
+  border-color: var(--primary);
+}
+
+.bet-option.active {
+  background: rgba(255, 215, 0, 0.1);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Video Poker */
+.poker-hand {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.poker-card {
+  width: 80px;
+  height: 120px;
+  background: white;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 1.5rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.poker-card.red { color: #dc143c; }
+.poker-card .card-suit { font-size: 2rem; }
+.poker-card.held {
+  border: 3px solid var(--primary);
+  box-shadow: 0 0 15px var(--primary);
+}
+
+.poker-card:hover {
+  transform: translateY(-5px);
+}
+
+.hold-badge {
+  position: absolute;
+  bottom: var(--space-xs);
+  background: var(--primary);
+  color: var(--bg-dark);
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+/* Video Slots */
+.video-slots-machine {
+  background: linear-gradient(180deg, #2a2a4a 0%, #1a1a2e 100%);
+  border: 3px solid var(--primary-dim);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.reels-container.video {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.reels-container.video .reel {
+  width: 60px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reels-container.video .reel .symbol {
+  font-size: 1.5rem;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paylines-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.free-spins-badge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dim) 100%);
+  color: var(--bg-dark);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  animation: pulse 2s infinite;
+}
+
+/* Progressive Slots */
+.jackpot-display-large {
+  text-align: center;
+  padding: var(--space-lg);
+  background: linear-gradient(135deg, var(--secondary) 0%, #9b0d45 100%);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.jackpot-display-large .jackpot-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: var(--space-xs);
+}
+
+.jackpot-display-large .jackpot-amount-large {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+}
+
+.payout-row.jackpot {
+  background: linear-gradient(135deg, rgba(224, 17, 95, 0.2) 0%, rgba(155, 13, 69, 0.2) 100%);
+  border: 1px solid var(--secondary);
+}
+
+/* Video Slots specific */
+.reels-container.video {
+  gap: var(--space-xs);
+}
+
+.reel.video {
+  width: 60px;
+  height: 180px;
+  flex-direction: column;
+}
+
+.reel.video .symbol {
+  font-size: 1.5rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-slots-machine {
+  background: linear-gradient(180deg, #2a2a4a 0%, #1a1a2e 100%);
+  border: 3px solid var(--primary-dim);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  position: relative;
+}
+
+.free-spins-badge {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dim) 100%);
+  color: var(--bg-dark);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  animation: pulse 1s infinite;
+}
+
+.paylines-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Progressive Jackpot */
+.jackpot-display-large {
+  background: linear-gradient(135deg, var(--secondary) 0%, #9b0d45 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  text-align: center;
+  margin-bottom: var(--space-xl);
+  animation: pulse 2s infinite;
+}
+
+.jackpot-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: var(--space-xs);
+}
+
+.jackpot-amount-large {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+/* Blackjack */
+.blackjack-table {
+  background: linear-gradient(135deg, #1a472a 0%, #0d2818 100%);
+  border: 3px solid #2d5a3d;
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+.hand {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.hand h3 {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: var(--space-md);
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 80px;
+  height: 112px;
+  background: white;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform var(--transition-fast);
+}
+
+.card.red {
+  color: #dc143c;
+}
+
+.card .value {
+  font-size: 1.5rem;
+}
+
+.card .suit {
+  font-size: 1.25rem;
+}
+
+.card.placeholder {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+}
+
+.game-message {
+  text-align: center;
+  padding: var(--space-md);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.game-message.win {
+  background: rgba(50, 205, 50, 0.3);
+}
+
+.game-message.lose {
+  background: rgba(220, 20, 60, 0.3);
+}
+
+.game-message .win-amount {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-top: var(--space-sm);
+}
+
+.spin-btn.stand {
+  background: linear-gradient(135deg, #4169e1 0%, #2c4cba 100%);
+}
+
+/* Roulette */
+.roulette-wheel {
+  background: #1a472a;
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.roulette-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  justify-content: center;
+}
+
+.roulette-number {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.roulette-number.red {
+  background: #dc143c;
+  color: white;
+}
+
+.roulette-number.black {
+  background: #1a1a1a;
+  color: white;
+}
+
+.roulette-number.zero {
+  background: #50c878;
+  color: white;
+}
+
+.roulette-number.selected {
+  transform: scale(1.2);
+  box-shadow: 0 0 10px var(--primary);
+}
+
+.roulette-number.winner {
+  animation: winPulse 0.5s ease-out;
+}
+
+.result-display {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.result-number {
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.result-number.red { color: #dc143c; }
+.result-number.black { color: #1a1a1a; }
+.result-number.green { color: #50c878; }
+
+.roulette-bets {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+.bet-section h3 {
+  font-size: 1rem;
+  margin-bottom: var(--space-md);
+  color: var(--primary);
+}
+
+.bet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+
+.bet-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-md);
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.bet-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+}
+
+.bet-btn.active {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: var(--primary);
+}
+
+.bet-name {
+  font-weight: 600;
+}
+
+.bet-payout {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.bet-btn .bet-amount {
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.total-bet {
+  text-align: center;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-md);
+  font-weight: 700;
+}
+
+.clear-btn {
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.clear-btn:hover:not(:disabled) {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+/* Baccarat */
+.baccarat-table {
+  background: linear-gradient(135deg, #1a472a 0%, #0d2818 100%);
+  border: 3px solid #2d5a3d;
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+.bet-selection {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.bet-option {
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-card-hover);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.bet-option:hover {
+  border-color: var(--primary);
+}
+
+.bet-option.active {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Video Poker */
+.poker-hand {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.poker-card {
+  width: 100px;
+  height: 140px;
+  background: white;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-weight: 700;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.poker-card.red {
+  color: #dc143c;
+}
+
+.poker-card:hover {
+  transform: translateY(-10px);
+}
+
+.poker-card.held {
+  border: 3px solid var(--primary);
+  box-shadow: 0 0 15px var(--primary);
+}
+
+.card-suit {
+  font-size: 2rem;
+}
+
+.hold-badge {
+  position: absolute;
+  bottom: var(--space-sm);
+  background: var(--primary);
+  color: var(--bg-dark);
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.payout-table .payout-row.jackpot {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(224, 17, 95, 0.2) 100%);
+  border: 1px solid var(--primary);
+}
