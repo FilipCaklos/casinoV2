@@ -1,7 +1,9 @@
-import './App.css'
-
-function App() {
-  return null
+.loading-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  font-size: 1.125rem;
+  letter-spacing: 0.02em;
 }
-
-export default App
