@@ -1,4 +1,5 @@
 import { createContext, useContext, useReducer, useEffect } from 'react'
+import { apiRequest } from '../utils/api'
 
 const AuthContext = createContext(null)
 
@@ -39,75 +40,61 @@ export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialState)
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('casino_user')
-    if (storedUser) {
+    const bootstrap = async () => {
+      const storedUser = localStorage.getItem('casino_user')
+      if (!storedUser) {
+        dispatch({ type: 'SET_LOADING', payload: false })
+        return
+      }
+
       try {
-        const user = JSON.parse(storedUser)
-        dispatch({ type: 'LOGIN_SUCCESS', payload: user })
+        const parsed = JSON.parse(storedUser)
+        const data = await apiRequest(`/api/users/${parsed.id}`)
+        localStorage.setItem('casino_user', JSON.stringify(data.user))
+        dispatch({ type: 'LOGIN_SUCCESS', payload: data.user })
       } catch {
+        localStorage.removeItem('casino_user')
         dispatch({ type: 'SET_LOADING', payload: false })
       }
-    } else {
-      dispatch({ type: 'SET_LOADING', payload: false })
     }
+
+    bootstrap()
   }, [])
 
   const login = async (username, password) => {
     dispatch({ type: 'SET_LOADING', payload: true })
 
-    await new Promise(resolve => setTimeout(resolve, 500))
+    try {
+      const data = await apiRequest('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password })
+      })
 
-    const users = JSON.parse(localStorage.getItem('casino_users') || '[]')
-    const user = users.find(u => u.username === username && u.password === password)
-
-    if (user) {
-      const { password: _, ...userWithoutPassword } = user
-      localStorage.setItem('casino_user', JSON.stringify(userWithoutPassword))
-      dispatch({ type: 'LOGIN_SUCCESS', payload: userWithoutPassword })
+      localStorage.setItem('casino_user', JSON.stringify(data.user))
+      dispatch({ type: 'LOGIN_SUCCESS', payload: data.user })
       return { success: true }
-    } else {
-      dispatch({ type: 'LOGIN_ERROR', payload: 'Invalid username or password' })
-      return { success: false, error: 'Invalid username or password' }
+    } catch (error) {
+      dispatch({ type: 'LOGIN_ERROR', payload: error.message })
+      return { success: false, error: error.message }
     }
   }
 
   const register = async (username, password) => {
     dispatch({ type: 'SET_LOADING', payload: true })
 
-    await new Promise(resolve => setTimeout(resolve, 500))
+    try {
+      const data = await apiRequest('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ username, password })
+      })
 
-    const users = JSON.parse(localStorage.getItem('casino_users') || '[]')
-
-    if (users.find(u => u.username === username)) {
+      localStorage.setItem('casino_user', JSON.stringify(data.user))
+      dispatch({ type: 'LOGIN_SUCCESS', payload: data.user })
+      return { success: true }
+    } catch (error) {
       dispatch({ type: 'SET_LOADING', payload: false })
-      return { success: false, error: 'Username already exists' }
+      return { success: false, error: error.message }
     }
-
-    const newUser = {
-      id: Date.now(),
-      username,
-      password,
-      balance: 10000,
-      createdAt: new Date().toISOString(),
-      avatar: 'player',
-      achievements: [],
-      stats: {
-        totalGames: 0,
-        totalWins: 0,
-        biggestWin: 0,
-        favoriteGame: null
-      },
-      lastDailyBonus: null
-    }
-
-    users.push(newUser)
-    localStorage.setItem('casino_users', JSON.stringify(users))
-
-    const { password: _, ...userWithoutPassword } = newUser
-    localStorage.setItem('casino_user', JSON.stringify(userWithoutPassword))
-    dispatch({ type: 'LOGIN_SUCCESS', payload: userWithoutPassword })
-
-    return { success: true }
   }
 
   const logout = () => {
@@ -115,39 +102,47 @@ export function AuthProvider({ children }) {
     dispatch({ type: 'LOGOUT' })
   }
 
-  const updateBalance = (newBalance) => {
+  const updateBalance = async (newBalance) => {
     if (!state.user) return
 
     const updatedUser = { ...state.user, balance: newBalance }
     localStorage.setItem('casino_user', JSON.stringify(updatedUser))
-
-    const users = JSON.parse(localStorage.getItem('casino_users') || '[]')
-    const userIndex = users.findIndex(u => u.id === state.user.id)
-    if (userIndex !== -1) {
-      users[userIndex].balance = newBalance
-      localStorage.setItem('casino_users', JSON.stringify(users))
-    }
-
     dispatch({ type: 'UPDATE_BALANCE', payload: newBalance })
+
+    try {
+      const data = await apiRequest(`/api/users/${state.user.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ balance: newBalance })
+      })
+      localStorage.setItem('casino_user', JSON.stringify(data.user))
+      dispatch({ type: 'UPDATE_USER', payload: data.user })
+    } catch (error) {
+      console.error('Failed to persist balance update:', error)
+    }
   }
 
-  const updateUser = (updates) => {
+  const updateUser = async (updates) => {
     if (!state.user) return
 
     const updatedUser = { ...state.user, ...updates }
     localStorage.setItem('casino_user', JSON.stringify(updatedUser))
-
-    const users = JSON.parse(localStorage.getItem('casino_users') || '[]')
-    const userIndex = users.findIndex(u => u.id === state.user.id)
-    if (userIndex !== -1) {
-      users[userIndex] = { ...users[userIndex], ...updates }
-      localStorage.setItem('casino_users', JSON.stringify(users))
-    }
-
     dispatch({ type: 'UPDATE_USER', payload: updates })
+
+    try {
+      const data = await apiRequest(`/api/users/${state.user.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(updates)
+      })
+      localStorage.setItem('casino_user', JSON.stringify(data.user))
+      dispatch({ type: 'UPDATE_USER', payload: data.user })
+      return data.user
+    } catch (error) {
+      console.error('Failed to persist user update:', error)
+      return null
+    }
   }
 
-  const claimDailyBonus = () => {
+  const claimDailyBonus = async () => {
     if (!state.user) return false
 
     const now = new Date()
@@ -161,8 +156,8 @@ export function AuthProvider({ children }) {
     }
 
     const newBalance = state.user.balance + 1000
-    updateBalance(newBalance)
-    updateUser({ lastDailyBonus: now.toISOString() })
+    await updateBalance(newBalance)
+    await updateUser({ lastDailyBonus: now.toISOString() })
 
     return true
   }

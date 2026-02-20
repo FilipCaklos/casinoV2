@@ -16,8 +16,8 @@ function Lobby() {
     return hoursSince >= 24
   }
 
-  const handleClaimBonus = () => {
-    const claimed = claimDailyBonus()
+  const handleClaimBonus = async () => {
+    const claimed = await claimDailyBonus()
     if (claimed) {
       alert('+1,000 credits added to your balance!')
     }

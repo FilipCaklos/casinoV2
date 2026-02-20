@@ -1,5 +1,6 @@
 import { createContext, useContext, useReducer, useEffect } from 'react'
 import { useAuth } from './AuthContext'
+import { apiRequest } from '../utils/api'
 
 const GameContext = createContext(null)
 
@@ -76,28 +77,40 @@ export function GameProvider({ children }) {
   const [state, dispatch] = useReducer(gameReducer, initialState)
 
   useEffect(() => {
-    if (user) {
-      const savedState = localStorage.getItem(`casino_game_${user.id}`)
-      if (savedState) {
-        try {
-          const parsed = JSON.parse(savedState)
-          dispatch({ type: 'LOAD_STATE', payload: parsed })
-        } catch (e) {
-          console.error('Failed to load game state:', e)
-        }
+    const loadState = async () => {
+      if (!user) return
+
+      try {
+        const data = await apiRequest(`/api/game-state/${user.id}`)
+        dispatch({ type: 'LOAD_STATE', payload: data.state })
+      } catch (error) {
+        console.error('Failed to load game state:', error)
       }
     }
+
+    loadState()
   }, [user])
 
   useEffect(() => {
-    if (user) {
-      localStorage.setItem(`casino_game_${user.id}`, JSON.stringify({
-        gameHistory: state.gameHistory,
-        achievements: state.achievements,
-        currentStreak: state.currentStreak,
-        progressiveJackpot: state.progressiveJackpot
-      }))
+    const saveState = async () => {
+      if (!user) return
+
+      try {
+        await apiRequest(`/api/game-state/${user.id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            gameHistory: state.gameHistory,
+            achievements: state.achievements,
+            currentStreak: state.currentStreak,
+            progressiveJackpot: state.progressiveJackpot
+          })
+        })
+      } catch (error) {
+        console.error('Failed to save game state:', error)
+      }
     }
+
+    saveState()
   }, [user, state])
 
   useEffect(() => {
@@ -203,27 +216,19 @@ export function GameProvider({ children }) {
   }
 
   const updateLeaderboards = () => {
-    const users = JSON.parse(localStorage.getItem('casino_users') || '[]')
+    const fetchLeaderboards = async () => {
+      try {
+        const data = await apiRequest('/api/leaderboards')
+        dispatch({
+          type: 'SET_LEADERBOARD',
+          payload: data.leaderboard
+        })
+      } catch (error) {
+        console.error('Failed to update leaderboards:', error)
+      }
+    }
 
-    const highestWin = [...users]
-      .sort((a, b) => (b.stats?.biggestWin || 0) - (a.stats?.biggestWin || 0))
-      .slice(0, 10)
-      .map(u => ({ username: u.username, score: u.stats?.biggestWin || 0 }))
-
-    const mostGames = [...users]
-      .sort((a, b) => (b.stats?.totalGames || 0) - (a.stats?.totalGames || 0))
-      .slice(0, 10)
-      .map(u => ({ username: u.username, score: u.stats?.totalGames || 0 }))
-
-    const biggestJackpot = [...users]
-      .sort((a, b) => (b.stats?.biggestJackpot || 0) - (a.stats?.biggestJackpot || 0))
-      .slice(0, 10)
-      .map(u => ({ username: u.username, score: u.stats?.biggestJackpot || 0 }))
-
-    dispatch({
-      type: 'SET_LEADERBOARD',
-      payload: { highestWin, mostGames, biggestJackpot }
-    })
+    fetchLeaderboards()
   }
 
   const getAchievements = () => ACHIEVEMENTS
