@@ -1,6 +1,7 @@
 import { createContext, useContext, useReducer, useEffect } from 'react'
 import { useAuth } from './AuthContext'
-import { apiRequest } from '../utils/api'
+
+const GAME_STORAGE_KEY = 'casino_guest_game_state'
 
 const GameContext = createContext(null)
 
@@ -77,45 +78,28 @@ export function GameProvider({ children }) {
   const [state, dispatch] = useReducer(gameReducer, initialState)
 
   useEffect(() => {
-    const loadState = async () => {
-      if (!user) return
-
-      try {
-        const data = await apiRequest(`/api/game-state/${user.id}`)
-        dispatch({ type: 'LOAD_STATE', payload: data.state })
-      } catch (error) {
-        console.error('Failed to load game state:', error)
+    try {
+      const stored = localStorage.getItem(GAME_STORAGE_KEY)
+      if (stored) {
+        dispatch({ type: 'LOAD_STATE', payload: JSON.parse(stored) })
       }
+    } catch (error) {
+      console.error('Failed to load game state:', error)
     }
-
-    loadState()
-  }, [user])
+  }, [])
 
   useEffect(() => {
-    const saveState = async () => {
-      if (!user) return
-
-      try {
-        await apiRequest(`/api/game-state/${user.id}`, {
-          method: 'PUT',
-          body: JSON.stringify({
-            gameHistory: state.gameHistory,
-            achievements: state.achievements,
-            currentStreak: state.currentStreak,
-            progressiveJackpot: state.progressiveJackpot
-          })
-        })
-      } catch (error) {
-        console.error('Failed to save game state:', error)
-      }
+    try {
+      localStorage.setItem(GAME_STORAGE_KEY, JSON.stringify({
+        gameHistory: state.gameHistory,
+        achievements: state.achievements,
+        currentStreak: state.currentStreak,
+        progressiveJackpot: state.progressiveJackpot
+      }))
+    } catch (error) {
+      console.error('Failed to save game state:', error)
     }
-
-    saveState()
-  }, [user, state])
-
-  useEffect(() => {
-    updateLeaderboards()
-  }, [state.gameHistory])
+  }, [state.gameHistory, state.achievements, state.currentStreak, state.progressiveJackpot])
 
   const addGame = (game) => {
     const gameEntry = {
@@ -216,19 +200,7 @@ export function GameProvider({ children }) {
   }
 
   const updateLeaderboards = () => {
-    const fetchLeaderboards = async () => {
-      try {
-        const data = await apiRequest('/api/leaderboards')
-        dispatch({
-          type: 'SET_LEADERBOARD',
-          payload: data.leaderboard
-        })
-      } catch (error) {
-        console.error('Failed to update leaderboards:', error)
-      }
-    }
-
-    fetchLeaderboards()
+    // Leaderboards are local-only in guest mode
   }
 
   const getAchievements = () => ACHIEVEMENTS

@@ -139,8 +139,7 @@
   color: var(--accent);
 }
 
-.profile-btn,
-.logout-btn {
+.profile-btn {
   width: 40px;
   height: 40px;
   display: flex;
@@ -155,11 +154,6 @@
 .profile-btn:hover {
   color: var(--primary);
   background: rgba(255, 215, 0, 0.15);
-}
-
-.logout-btn:hover {
-  color: var(--danger);
-  background: rgba(220, 20, 60, 0.15);
 }
 
 /* Menu Toggle */
