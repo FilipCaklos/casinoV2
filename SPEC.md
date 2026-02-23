@@ -77,11 +77,10 @@
 
 ## 4. Core Features
 
-### 4.1 User System
-- **Registration:** Username, password (stored hashed in localStorage)
-- **Login/Logout:** Session management
-- **Profile:** Username, avatar selection, join date, stats
-- **Initial Balance:** 10,000 virtual credits on signup
+### 4.1 Guest User
+- **Mode:** Always-on guest experience, no registration or login required
+- **Profile:** Username displayed as "Guest", join date, stats
+- **Initial Balance:** 10,000 virtual credits on first visit, persisted in localStorage
 
 ### 4.2 Virtual Currency
 - **Starting Credits:** 10,000
@@ -148,8 +147,6 @@
 3. **Table Games** (`/tables`) - Table game selection
 4. **Profile** (`/profile`) - User stats and settings
 5. **Leaderboards** (`/leaderboards`) - Rankings
-6. **Login** (`/login`) - Auth page
-7. **Register** (`/register`) - Sign up
 
 ### Game Views
 - Each game has its own route (e.g., `/game/slots/classic`)
@@ -191,7 +188,7 @@
  Acceptance Criteria
 
 ### Must Have
-- [ ] User can register and login
+- [ ] App starts without login, guest user always present
 - [ ] Virtual balance displays correctly
 - [ ] All 7 games functional with proper rules
 - [ ] Betting system works (deduct credits, add winnings)

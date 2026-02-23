@@ -1,20 +1,14 @@
-import { Outlet, Link, useNavigate } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useGame } from '../context/GameContext'
-import { Coins, User, Trophy, LogOut, Menu, X, Home, Gamepad2 } from 'lucide-react'
+import { Coins, User, Trophy, Menu, X, Home, Gamepad2 } from 'lucide-react'
 import { useState } from 'react'
 import './Layout.css'
 
 function Layout() {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const { progressiveJackpot } = useGame()
-  const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
-
-  const handleLogout = () => {
-    logout()
-    navigate('/login')
-  }
 
   const formatBalance = (balance) => {
     return balance?.toLocaleString() || '0'
@@ -68,10 +62,6 @@ function Layout() {
             <Link to="/profile" className="profile-btn" onClick={() => setMenuOpen(false)}>
               <User size={20} />
             </Link>
-
-            <button className="logout-btn" onClick={handleLogout} title="Logout">
-              <LogOut size={20} />
-            </button>
           </div>
         </div>
       </header>
