@@ -135,7 +135,7 @@ function Baccarat() {
     }
 
     if (winAmount > 0) {
-      updateBalance(user.balance + winAmount)
+      updateBalance(user.balance - bet + winAmount)
       setWin(winAmount - bet)
       setMessage(result === 'tie' ? 'Tie! Nobody wins.' : `${result.toUpperCase()} wins!`)
 
@@ -150,7 +150,6 @@ function Baccarat() {
     } else {
       setWin(-bet)
       setMessage(result === 'tie' ? 'Tie! Nobody wins.' : `${result.toUpperCase()} wins.`)
-      setWin(-bet)
 
       addGame({
         type: 'baccarat',
